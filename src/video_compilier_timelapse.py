@@ -5,7 +5,7 @@ from datetime import datetime
 
 def main():
     # Directory containing the JPEG frames (filenames are Unix timestamps in ms).
-    frames_dir = "frames"
+    frames_dir = "frames_1744829331345"
     file_pattern = os.path.join(frames_dir, "*.jpg")
     
     # Get a sorted list of all jpg files, sorted by their numeric timestamp (from the filename).
@@ -22,7 +22,7 @@ def main():
     # For a 50x speedup:
     # One second of output (30 frames at 30 FPS) represents 50 seconds of real time.
     # Therefore, each output frame should represent 50/30 seconds (~1.667 sec) of capture time.
-    desired_interval = 100.0 / 30.0  # seconds per output frame
+    desired_interval = 300.0 / 30.0  # seconds per output frame
     next_required_time = first_ts  # initialize with the first frame's time
     
     # Read the first frame to determine the video dimensions.
@@ -33,7 +33,7 @@ def main():
     height, width, _ = first_frame.shape
 
     # Set up VideoWriter to produce an MP4 file at 30 FPS.
-    output_file = "output_100x_30fps.mp4"
+    output_file = "output_300x_30fps.mp4"
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     video_out = cv2.VideoWriter(output_file, fourcc, 30, (width, height))
 
