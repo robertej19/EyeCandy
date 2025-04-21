@@ -5,7 +5,7 @@ from datetime import datetime
 
 def main():
     # Directory containing the saved frames (filenames are Unix timestamps in milliseconds).
-    frames_dir = "frames"
+    frames_dir = "test_frames"
     file_pattern = os.path.join(frames_dir, "*.jpg")
     # Get a sorted list of all jpg files, sorting by filename parsed as an integer.
     files = sorted(glob.glob(file_pattern), key=lambda x: int(os.path.splitext(os.path.basename(x))[0]))
@@ -50,13 +50,16 @@ def main():
 
     for f in files:
         # Read the frame (OpenCV returns in BGR).
-        frame_rgb = cv2.imread(f)
-        if frame_rgb is None:
+        frame_bgr = cv2.imread(f)
+
+        if frame_bgr is None:
             continue
 
         # Convert the frame from BGR to RGB.
-        #frame_rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
-
+        frame_rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
+        # Rotate the frame 180 degrees.
+        frame_rgb = cv2.rotate(frame_rgb, cv2.ROTATE_180)
+        
         # Extract the timestamp from the filename.
         # The filename (without extension) is assumed to be a Unix timestamp in milliseconds.
         ts_int = int(os.path.splitext(os.path.basename(f))[0])

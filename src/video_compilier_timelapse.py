@@ -5,7 +5,7 @@ from datetime import datetime
 
 def main():
     # Directory containing the JPEG frames (filenames are Unix timestamps in ms).
-    frames_dir = "frames_1744829331345"
+    frames_dir = "frames_1745176126089"
     file_pattern = os.path.join(frames_dir, "*.jpg")
     
     # Get a sorted list of all jpg files, sorted by their numeric timestamp (from the filename).
@@ -31,7 +31,7 @@ def main():
         print("Error reading the first frame.")
         return
     height, width, _ = first_frame.shape
-
+    #rotate fram 180 degrees
     # Set up VideoWriter to produce an MP4 file at 30 FPS.
     output_file = "output_300x_30fps.mp4"
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -48,10 +48,13 @@ def main():
         if ts >= next_required_time:
             # Read the frame.
             frame = cv2.imread(f)
+            # Rotate the frame 180 degrees.
+            frame = cv2.rotate(frame, cv2.ROTATE_180)
+
             if frame is None:
                 continue
             # Convert the frame from BGR to RGB if needed (not necessary for saving).
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
 
             # Prepare the timestamp string:
