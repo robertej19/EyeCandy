@@ -7,8 +7,8 @@ STREAM_URL = "http://192.168.1.189:8485/video"
 
 # Create a unique directory at startup using the current Unix timestamp in milliseconds.
 start_timestamp = int(time.time() * 1000)
-#FRAME_DIR = f"/mnt/e/EyeCandy/data/frames_{start_timestamp}"
-FRAME_DIR = f"frames_{start_timestamp}"
+FRAME_DIR = f"/mnt/e/EyeCandy/data/frames_{start_timestamp}"
+#FRAME_DIR = f"frames_{start_timestamp}"
 
 os.makedirs(FRAME_DIR, exist_ok=True)
 print(f"Saving frames to directory: {FRAME_DIR}")
