@@ -5,10 +5,10 @@ from datetime import datetime
 
 def main():
     # Directory containing the saved frames (filenames are Unix timestamps in milliseconds).
-    frames_dir = "test_frames"
+    frames_dir = "test_output_frames_2"
     file_pattern = os.path.join(frames_dir, "*.jpg")
     # Get a sorted list of all jpg files, sorting by filename parsed as an integer.
-    files = sorted(glob.glob(file_pattern), key=lambda x: int(os.path.splitext(os.path.basename(x))[0]))
+    files = sorted(glob.glob(file_pattern), key=lambda x: int(os.path.splitext(os.path.basename(x))[0].split("_")[0]))
     
     if not files:
         print("No frames found in the directory.")
@@ -24,7 +24,11 @@ def main():
     # Extract timestamps from filenames to compute the effective FPS.
     timestamps = []
     for f in files:
-        ts_int = int(os.path.splitext(os.path.basename(f))[0])
+        basename = os.path.splitext(os.path.basename(f))[0]
+        print(f"Processing file: {basename}")
+        # base is unixtimestamp_otherstuff, so split on the first underscore.
+        base = basename.split("_")[0]
+        ts_int = int(base)
         # Convert milliseconds to seconds.
         timestamps.append(ts_int / 1000.0)
     
@@ -38,7 +42,7 @@ def main():
     print(f"Computed FPS for the video: {fps:.2f}")
 
     # Setup VideoWriter: use 'mp4v' codec for mp4 output.
-    output_file = "output.mp4"
+    output_file = "output2.mp4"
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     video_out = cv2.VideoWriter(output_file, fourcc, fps, (width, height))
 
@@ -51,6 +55,8 @@ def main():
     for f in files:
         # Read the frame (OpenCV returns in BGR).
         frame_bgr = cv2.imread(f)
+        # rotate the frame 180 degrees.
+        frame_bgr = cv2.rotate(frame_bgr, cv2.ROTATE_180)
 
         if frame_bgr is None:
             continue
@@ -62,7 +68,7 @@ def main():
         
         # Extract the timestamp from the filename.
         # The filename (without extension) is assumed to be a Unix timestamp in milliseconds.
-        ts_int = int(os.path.splitext(os.path.basename(f))[0])
+        ts_int = int(os.path.splitext(os.path.basename(f))[0].split("_")[0])
         dt = datetime.fromtimestamp(ts_int / 1000.0)
 
         # Format the timestamp.
